@@ -4,14 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace AppNET.Domain.Entities
 {
-    public  class Cash
+    internal class Invoice
     {
-        public decimal MoneyAmount { get; set; }
-
-       
     }
-    
 }

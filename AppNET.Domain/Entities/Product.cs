@@ -16,6 +16,10 @@ namespace AppNET.Domain.Entities
         public decimal Price { get; set; }
 
         public string CategoryName { get; set; }
+
+        public decimal BuyPrice { get; set; }
+
+        public decimal SellPrice { get; set; }
         //public int CategoryId { get; set; }
     }
 }

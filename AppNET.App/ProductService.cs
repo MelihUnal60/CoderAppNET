@@ -74,5 +74,11 @@ namespace AppNET.App
             }
             return true;
         }
+
+        public void SaveOutcomeToCash(int stock, decimal buyPrice)
+        {
+            decimal outcome = stock * buyPrice;
+            
+        }
     }
 }

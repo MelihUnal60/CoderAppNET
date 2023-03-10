@@ -18,6 +18,8 @@ namespace AppNET.App
         Product Update(int productId,string categoryName,string newProductName,int stock,decimal price);
 
         bool DeleteProductsByCategory(string categoryName);
+
+        void SaveProductToCash();
     }
 
     

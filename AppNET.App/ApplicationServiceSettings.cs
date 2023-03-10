@@ -30,6 +30,8 @@ namespace AppNET.App
             //IOCContainer.Register<IRepository<Category>>(() => new EFCoreRepository<Category>());
             IOCContainer.Register<ICategoryService>(()=> new CategoryService());
             IOCContainer.Register<IProductService>(() => new ProductService());
+            IOCContainer.Register<IInvoiceService>(()=> new InvoiceService());
+            IOCContainer.Register<IRepository<Invoice>>(()=> new TextFileRepository<Invoice>());
         }
 
         //public static IRepository<Category> Metod()
