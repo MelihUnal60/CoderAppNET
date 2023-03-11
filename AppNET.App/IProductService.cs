@@ -19,7 +19,7 @@ namespace AppNET.App
 
         bool DeleteProductsByCategory(string categoryName);
 
-        void SaveProductToCash();
+        void SaveOutcomeToCash();
     }
 
     

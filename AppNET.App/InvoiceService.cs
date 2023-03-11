@@ -45,7 +45,10 @@ namespace AppNET.App
             invoice.Price = price;
             invoice.Description = description;
             _repositoryInvoice.Add(invoice);
+            
+            
 
         }
+        
     }
 }

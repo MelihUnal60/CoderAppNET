@@ -14,10 +14,13 @@ namespace AppNET.App
     public class ProductService : IProductService
     {
         private readonly IRepository<Product> _productRepository;
+        private readonly IInvoiceService<Invoice> _invoiceService; 
 
         public ProductService()
         {
             _productRepository = IOCContainer.Resolve<IRepository<Product>>();
+            _invoiceService= IOCContainer.Resolve<IInvoiceService>();
+            
         }
         public void Created(int id, string categoryName, string productName, int productStock, decimal productPrice)
         {
@@ -35,6 +38,7 @@ namespace AppNET.App
             product.Price = productPrice;
             product.Stock = productStock;
             _productRepository.Add(product);
+            
         }
 
         
@@ -75,10 +79,6 @@ namespace AppNET.App
             return true;
         }
 
-        public void SaveOutcomeToCash(int stock, decimal buyPrice)
-        {
-            decimal outcome = stock * buyPrice;
-            
-        }
+        public void 
     }
 }

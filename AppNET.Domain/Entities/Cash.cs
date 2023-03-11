@@ -11,7 +11,7 @@ namespace AppNET.Domain.Entities
     {
         public decimal MoneyAmount { get; set; }
 
-       
+        public List<Invoice> Invoices { get; set; }
     }
     
 }
