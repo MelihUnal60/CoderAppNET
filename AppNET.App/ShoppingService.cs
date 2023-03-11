@@ -11,6 +11,7 @@ namespace AppNET.App
     public class ShoppingService
     {
         private readonly IRepository<Product> _productsRepository;
+        private readonly CashService cashService;
 
         public void SellProduct(string name,int stock,decimal price)
         {
@@ -19,7 +20,10 @@ namespace AppNET.App
             soldProduct.Price = price;
             soldProduct.Stock = stock;
             if (ControlStockForSale(name, stock))
+            {
                 _productsRepository.Remove(soldProduct);
+                cashService.SaveIncome(price, stock, name);
+            }
             else
                 throw new Exception("Satış işlemi gerçekleştirilemedi!!");
 

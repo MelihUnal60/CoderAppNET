@@ -45,5 +45,15 @@ namespace AppNET.App
             AddInvoiceToCashList(invoice);
         }
 
+        public void SaveIncome(decimal productPrice,int stock,string productName)
+        {
+            Invoice invoice= new Invoice();
+            invoice.Description = productName + " " + "ürününden" + " " + stock + " " + "miktarda satıldı.";
+            invoice.Price = productPrice * stock;
+            invoice.DocDate = DateTime.Now;
+            invoice.DocType = "Gelir";
+            SaveInvoiceToCash(invoice, stock);
+            AddInvoiceToCashList(invoice);
+        }
     }
 }
