@@ -52,6 +52,9 @@ namespace AppNET.App
             invoice.DocDate = DateTime.Now;
             invoice.DocType = "Gider";
             _repositoryInvoice.Add(invoice);
+            SaveInvoiceToCash(invoice);
+            AddInvoiceToCashList(invoice);
+            
             
         }
 
@@ -63,7 +66,8 @@ namespace AppNET.App
             invoice.DocDate = DateTime.Now;
             invoice.DocType = "Gelir";
            _repositoryInvoice.Add(invoice);
-           
+            SaveInvoiceToCash(invoice);
+            AddInvoiceToCashList(invoice);
         }
     }
 }
