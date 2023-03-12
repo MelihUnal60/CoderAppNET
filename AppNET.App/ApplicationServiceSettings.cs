@@ -27,11 +27,15 @@ namespace AppNET.App
 
             IOCContainer.Register<IRepository<Category>>(()=>new TextFileRepository<Category>());
             IOCContainer.Register<IRepository<Product>>(()=> new TextFileRepository<Product>());
+            IOCContainer.Register<IRepository<Invoice>>(() => new TextFileRepository<Invoice>());
             //IOCContainer.Register<IRepository<Category>>(() => new EFCoreRepository<Category>());
             IOCContainer.Register<ICategoryService>(()=> new CategoryService());
             IOCContainer.Register<IProductService>(() => new ProductService());
-            IOCContainer.Register<IInvoiceService>(()=> new InvoiceService());
-            IOCContainer.Register<IRepository<Invoice>>(()=> new TextFileRepository<Invoice>());
+            IOCContainer.Register<IInvoiceService>(() => new InvoiceService());
+            IOCContainer.Register<ShoppingService>(()=> new ShoppingService());
+            IOCContainer.Register<CashService>(()=> new CashService());
+            IOCContainer.Register<InvoiceService>(()=> new InvoiceService());
+            IOCContainer.Register<ProductService>(()=> new ProductService());
         }
 
         //public static IRepository<Category> Metod()

@@ -1,5 +1,7 @@
 ﻿using AppNET.Domain.Entities;
 using AppNET.Domain.Entities.Base;
+using AppNET.Domain.Interfaces;
+using AppNET.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +12,25 @@ namespace AppNET.App
 {
     public class CashService
     {
-        public void SaveInvoiceToCash(Invoice invoice,int stock)
+        private readonly InvoiceService invoiceService;
+        private readonly IRepository<Invoice> _repositoryInvoice;
+
+        public CashService()
+        {
+            invoiceService= IOCContainer.Resolve<InvoiceService>();
+            _repositoryInvoice = IOCContainer.Resolve<IRepository<Invoice>>();
+        }
+
+        public void SaveInvoiceToCash(Invoice invoice)
         {
 
             Cash cash = new Cash();
-            Product product= new Product();
-            product.Stock = stock;
+            decimal shopPrice = invoice.Price;
 
             if (invoice.DocType == "Gelir")
-                cash.MoneyAmount += (invoice.Price *  product.Stock);
+                cash.MoneyAmount += (invoice.Price *  shopPrice);
             else
-                cash.MoneyAmount -= (invoice.Price * product.Stock);
+                cash.MoneyAmount -= (invoice.Price * shopPrice);
                
         }
 
@@ -41,8 +51,8 @@ namespace AppNET.App
             invoice.Price = productPrice * stock;
             invoice.DocDate = DateTime.Now;
             invoice.DocType = "Gider";
-            SaveInvoiceToCash(invoice, stock);
-            AddInvoiceToCashList(invoice);
+            _repositoryInvoice.Add(invoice);
+            
         }
 
         public void SaveIncome(decimal productPrice,int stock,string productName)
@@ -52,8 +62,8 @@ namespace AppNET.App
             invoice.Price = productPrice * stock;
             invoice.DocDate = DateTime.Now;
             invoice.DocType = "Gelir";
-            SaveInvoiceToCash(invoice, stock);
-            AddInvoiceToCashList(invoice);
+           _repositoryInvoice.Add(invoice);
+           
         }
     }
 }

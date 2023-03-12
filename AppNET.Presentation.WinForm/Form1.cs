@@ -14,6 +14,9 @@ namespace AppNET.Presentation.WinForm
 
         ICategoryService categoryService = IOCContainer.Resolve<ICategoryService>();
         IProductService productService = IOCContainer.Resolve<IProductService>();
+        IInvoiceService invoiceService= IOCContainer.Resolve<IInvoiceService>();
+        CashService cashService= IOCContainer.Resolve<CashService>();
+        ShoppingService shoppingService= IOCContainer.Resolve<ShoppingService>();
 
 
         private void FillProductGrid()
@@ -23,6 +26,10 @@ namespace AppNET.Presentation.WinForm
         private void FillCategoryGrid()
         {
             grdCategory.DataSource = categoryService.GetAllCategory();
+        }
+        private void FillInvoiceGrid()
+        {
+            grgShoppingInfo.DataSource = invoiceService.GetInvoices();
         }
         private void FillCombobox()
         {
@@ -37,6 +44,7 @@ namespace AppNET.Presentation.WinForm
             FillProductGrid();
             FillCategoryGrid();
             FillCombobox();
+            FillInvoiceGrid();
         }
 
 
@@ -128,12 +136,12 @@ namespace AppNET.Presentation.WinForm
                 //string selectedCategoryName =Convert.ToString(cmbCategortList.SelectedValue);
                 var selectedCategoryName = cmbCategortList.Text;
 
-                productService.Created(id, selectedCategoryName, Convert.ToString(MyExtensions.FirstLetterUppercase(txtProductName.Text)), Convert.ToInt32(txtProductStock.Text), Convert.ToDecimal(txtProductPrice.Text));
+                productService.Created(id, selectedCategoryName, Convert.ToString(MyExtensions.FirstLetterUppercase(txtProductName.Text)), Convert.ToInt32(txtProductStock.Text), Convert.ToDecimal(txtProductBuyPrice.Text),Convert.ToDecimal(txtProductSellPrice.Text));
 
             }
             else
             {
-                productService.Update(Convert.ToInt32(txtProductId.Text), cmbCategortList.Text, MyExtensions.FirstLetterUppercase(txtProductName.Text), Convert.ToInt32(txtProductStock.Text), Convert.ToDecimal(txtProductPrice.Text));
+                productService.Update(Convert.ToInt32(txtProductId.Text), cmbCategortList.Text, MyExtensions.FirstLetterUppercase(txtProductName.Text), Convert.ToInt32(txtProductStock.Text), Convert.ToDecimal(txtProductBuyPrice.Text),Convert.ToDecimal(txtProductSellPrice.Text));
 
                 btnSaveProduct.Text = "KAYDET";
                 groupBox2.Text = "Yeni Ürün";
@@ -142,7 +150,8 @@ namespace AppNET.Presentation.WinForm
 
             txtProductId.Text = "";
             txtProductName.Clear();
-            txtProductPrice.Clear();
+            txtProductBuyPrice.Clear();
+            txtProductSellPrice.Clear();
             txtProductStock.Clear();
 
             
@@ -168,20 +177,43 @@ namespace AppNET.Presentation.WinForm
             var categoryName = grdProduct.CurrentRow.Cells["CategoryName"].Value.ToString();
             string productName = grdProduct.CurrentRow.Cells["Name"].Value.ToString();
             var stock = Convert.ToInt32(grdProduct.CurrentRow.Cells["Stock"].Value.ToString());
-            var price = Convert.ToDecimal(grdProduct.CurrentRow.Cells["Price"].Value.ToString());
-
+            var buyPrice = Convert.ToDecimal(grdProduct.CurrentRow.Cells["BuyPrice"].Value.ToString());
+            var sellPrice = Convert.ToDecimal(grdProduct.CurrentRow.Cells["SellPrice"].Value.ToString());
 
             txtProductId.Text = id;
             txtProductName.Text = productName;
             cmbCategortList.Text = categoryName;
             txtProductStock.Text = Convert.ToString(stock);
-            txtProductPrice.Text = Convert.ToString(price);
+            txtProductBuyPrice.Text = Convert.ToString(buyPrice);
+            txtProductSellPrice.Text = Convert.ToString(sellPrice);
 
 
 
             txtProductId.Enabled = false;
             btnSaveProduct.Text = "GÜNCELLE";
             groupBox2.Text = "Ürün Güncelle";
+        }
+
+        private void btnShopping_Click(object sender, EventArgs e)
+        {
+            string name = txtShopProductName.Text;
+            int stock = Convert.ToInt32(txtShopProductStock.Text);
+            if (cbbShopType.Text == "ALIÞ")
+            {
+                decimal buyPrice = Convert.ToDecimal(txtShopProductPrice.Text);
+                shoppingService.BuyProduct(name, stock, buyPrice);
+                invoiceService.SaveInvoice(999, "Gider", buyPrice, $"{name} ürününden {stock} adet alýndý.");
+
+            }
+            else
+            {
+                decimal sellPrice = Convert.ToDecimal(txtShopProductPrice.Text);
+                shoppingService.SellProduct(name, stock, sellPrice);
+                invoiceService.SaveInvoice(333, "Gelir", sellPrice, $"{name} ürününden {stock} adet satýldý.");
+            }
+
+            FillInvoiceGrid();
+            FillProductGrid();
         }
     }
 }

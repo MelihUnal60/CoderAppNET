@@ -14,15 +14,16 @@ namespace AppNET.App
     public class ProductService : IProductService
     {
         private readonly IRepository<Product> _productRepository;
-        private readonly IInvoiceService<Invoice> _invoiceService; 
+        private readonly CashService cashService;
 
         public ProductService()
         {
             _productRepository = IOCContainer.Resolve<IRepository<Product>>();
-            _invoiceService= IOCContainer.Resolve<IInvoiceService>();
+            cashService = IOCContainer.Resolve<CashService>();
             
         }
-        public void Created(int id, string categoryName, string productName, int productStock, decimal productPrice)
+        public void Created(int id, string categoryName, string productName, int productStock,
+            decimal buyPrice, decimal sellPrice)
         {
             if (string.IsNullOrWhiteSpace(productName))
                 throw new ArgumentException("Ürün İsmi Boş Olamaz");
@@ -35,9 +36,13 @@ namespace AppNET.App
             product.Name = MyExtensions.FirstLetterUppercase(productName);
             product.CategoryName =Convert.ToString(categoryName);
             product.CreatedDate = DateTime.Now;
-            product.Price = productPrice;
+            product.BuyPrice = buyPrice;
+            product.SellPrice = sellPrice;
             product.Stock = productStock;
             _productRepository.Add(product);
+            var savedProduct = _productRepository.GetList().FirstOrDefault(p => p.Id == id);
+            cashService.SaveOutcome(savedProduct.BuyPrice, savedProduct.Stock, savedProduct.Name);
+            
             
         }
 
@@ -54,7 +59,7 @@ namespace AppNET.App
             return _productRepository.GetList().ToList().AsReadOnly();
         }
 
-        public Product Update(int productId,string categoryName, string newProductName,int stock,decimal price)
+        public Product Update(int productId,string categoryName, string newProductName,int stock,decimal buyPrice,decimal sellPrice)
         {
             if (string.IsNullOrWhiteSpace(newProductName))
                 throw new ArgumentException("Ürün İsmi Boş Olamaz");
@@ -64,7 +69,8 @@ namespace AppNET.App
             product.Name = MyExtensions.FirstLetterUppercase(newProductName);
             product.CategoryName = categoryName;
             product.Stock = stock;
-            product.Price = price;
+            product.BuyPrice = buyPrice;
+            product.SellPrice = sellPrice;
             return _productRepository.Update(productId, product);
 
         }
@@ -79,6 +85,6 @@ namespace AppNET.App
             return true;
         }
 
-        public void 
+         
     }
 }

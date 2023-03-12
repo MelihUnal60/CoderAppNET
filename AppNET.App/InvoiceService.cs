@@ -2,6 +2,7 @@
 using AppNET.Domain.Interfaces;
 using AppNET.Infrastructure;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,12 +12,14 @@ namespace AppNET.App
 {
     public class InvoiceService : IInvoiceService
     {
-        private List<Invoice> invoiceList = new List<Invoice>();
+        
         private readonly IRepository<Invoice> _repositoryInvoice;
+        //private readonly CashService cashService;
 
         public InvoiceService()
         {
             _repositoryInvoice = IOCContainer.Resolve<IRepository<Invoice>>();
+            //cashService = IOCContainer.Resolve<CashService>();
         }
 
         public bool DeleteInvoice(int invoiceId)
@@ -24,7 +27,7 @@ namespace AppNET.App
           return _repositoryInvoice.Remove(invoiceId);
         }
 
-        public IReadOnlyCollection<Invoice> GetInvoices()
+        public IReadOnlyCollection <Invoice> GetInvoices()
         {
             return _repositoryInvoice.GetList().ToList().AsReadOnly();
         }
@@ -45,10 +48,12 @@ namespace AppNET.App
             invoice.Price = price;
             invoice.Description = description;
             _repositoryInvoice.Add(invoice);
-            
-            
+
+            //cashService.SaveInvoiceToCash(invoice);
+            //cashService.AddInvoiceToCashList(invoice);
 
         }
+
         
     }
 }
