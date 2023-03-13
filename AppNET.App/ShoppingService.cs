@@ -35,6 +35,9 @@ namespace AppNET.App
 
                 var soldStock = _productsRepository.GetList().FirstOrDefault(p => p.Name == soldProduct.Name);
                 soldStock.Stock -= soldProduct.Stock;
+                soldStock.SellPrice = soldProduct.SellPrice;
+                soldStock.UpdatedDate= DateTime.Now;
+                _productsRepository.Update(soldStock.Id, soldStock);
                 cashService.SaveIncome(price, stock, name);
             }
             else

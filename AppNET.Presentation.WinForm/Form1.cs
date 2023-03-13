@@ -197,7 +197,7 @@ namespace AppNET.Presentation.WinForm
         private void btnShopping_Click(object sender, EventArgs e)
         {
             string name = txtShopProductName.Text;
-            int stock = Convert.ToInt32(txtShopProductStock.Text);
+            int stock = Convert.ToInt32(txtShopProductStock.Text.ToString());
             if (cbbShopType.Text == "ALIÞ")
             {
                 decimal buyPrice = Convert.ToDecimal(txtShopProductPrice.Text);
