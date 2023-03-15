@@ -15,18 +15,22 @@ namespace AppNET.App
     {
         private readonly IRepository<Product> _productRepository;
         private readonly CashService cashService;
+        private readonly ILogService logService;
 
         public ProductService()
         {
             _productRepository = IOCContainer.Resolve<IRepository<Product>>();
             cashService = IOCContainer.Resolve<CashService>();
+            logService= IOCContainer.Resolve<ILogService>();
             
         }
         public void Created(int id, string categoryName, string productName, int productStock,
             decimal buyPrice, decimal sellPrice)
         {
             if (string.IsNullOrWhiteSpace(productName))
+            { logService.ErrorLog("HATA : ÜRÜN İSMİ BOŞ");
                 throw new ArgumentException("Ürün İsmi Boş Olamaz");
+            }
             var oldProductName = _productRepository.GetList().FirstOrDefault(p => p.Name == productName);
             if (oldProductName != null)
                 return;
@@ -42,6 +46,7 @@ namespace AppNET.App
             _productRepository.Add(product);
             var savedProduct = _productRepository.GetList().FirstOrDefault(p => p.Id == id);
             cashService.SaveOutcome(savedProduct.BuyPrice, savedProduct.Stock, savedProduct.Name);
+            logService.SuccessLog("BAŞARILI İŞLEM : ÜRÜN BAŞARIYLA OLUŞTURULDU.");
             
             
         }
@@ -50,7 +55,9 @@ namespace AppNET.App
 
         public bool Deleted(int productId)
         {
+            logService.SuccessLog("BAŞARILI İŞLEM : ÜRÜN BAŞARIYLA SİLİNDİ.");
            return _productRepository.Remove(productId);
+            
         }
  
 
@@ -71,7 +78,9 @@ namespace AppNET.App
             product.Stock = stock;
             product.BuyPrice = buyPrice;
             product.SellPrice = sellPrice;
+            logService.SuccessLog("BAŞARILI İŞLEM : ÜRÜN BAŞARIYLA GÜNCELLENDİ.");
             return _productRepository.Update(productId, product);
+            
 
         }
 
@@ -81,7 +90,9 @@ namespace AppNET.App
             foreach (var item in list)
             {
                 _productRepository.Remove(item.Id);
+                logService.InfoLog("BİLGİ : ÜRÜN SİLİNDİ.");
             }
+            
             return true;
         }
 

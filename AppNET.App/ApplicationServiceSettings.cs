@@ -1,4 +1,5 @@
 ﻿using AppNET.Domain.Entities;
+using AppNET.Domain.Entities.LogAggregate;
 using AppNET.Domain.Interfaces;
 using AppNET.Infrastructure;
 using AppNET.Infrastructure.EFCore;
@@ -36,6 +37,8 @@ namespace AppNET.App
             IOCContainer.Register<CashService>(()=> new CashService());
             IOCContainer.Register<InvoiceService>(()=> new InvoiceService());
             IOCContainer.Register<ProductService>(()=> new ProductService());
+            IOCContainer.Register<IRepository<Log>>(()=>new TextFileRepository<Log>());
+            IOCContainer.Register<ILogService>(()=>new LogService());
         }
 
         //public static IRepository<Category> Metod()

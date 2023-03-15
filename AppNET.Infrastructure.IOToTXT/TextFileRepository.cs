@@ -1,5 +1,6 @@
 ﻿using AppNET.Domain.Entities;
 using AppNET.Domain.Entities.Base;
+using AppNET.Domain.Entities.LogAggregate;
 using AppNET.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -137,5 +138,11 @@ namespace AppNET.Infrastructure.IOToTXT
             }
             return false;
         }
+        public static void WriteLogToTxt(LogType log,string fileRoad)
+        {
+             File.WriteAllText(log.ToString(), fileRoad);
+        }
+
+        
     }
 }

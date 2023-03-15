@@ -15,6 +15,7 @@ namespace AppNET.App
         private readonly CashService cashService;
         private readonly ProductService productService;
         private readonly InvoiceService invoiceService;
+        private readonly ILogService logService;
 
         public ShoppingService()
         {
@@ -22,6 +23,7 @@ namespace AppNET.App
             cashService = IOCContainer.Resolve<CashService>();
             productService= IOCContainer.Resolve<ProductService>();
             invoiceService= IOCContainer.Resolve<InvoiceService>();
+            logService= IOCContainer.Resolve<ILogService>();
         }
 
         public void SellProduct(string name,int stock,decimal price)
@@ -36,13 +38,16 @@ namespace AppNET.App
                 var soldStock = _productsRepository.GetList().FirstOrDefault(p => p.Name == soldProduct.Name);
                 soldStock.Stock -= soldProduct.Stock;
                 soldStock.SellPrice = soldProduct.SellPrice;
-                soldStock.UpdatedDate= DateTime.Now;
+                soldStock.UpdatedDate = DateTime.Now;
                 _productsRepository.Update(soldStock.Id, soldStock);
                 cashService.SaveIncome(price, stock, name);
+                logService.InfoLog($"BİLGİ : {name.ToUpper()} ÜRÜNÜNDEN {stock} ADET SATILDI.");
             }
             else
+            {
+                logService.ErrorLog("HATA : ÜRÜN SATIŞI YAPILAMADI.");
                 throw new Exception("Satış işlemi gerçekleştirilemedi!!");
-
+            }
         }
 
         public bool ControlStockForSale(string saledProduct,int sellAmount)
@@ -54,7 +59,7 @@ namespace AppNET.App
             if (sellAmount > productForSale.Stock)
             {
                 throw new Exception("En fazla" + " " + productForSale.Stock + " " + "ürün satılabilir!!");
-                return false;
+                
             }
             else
                 return true;
@@ -70,6 +75,7 @@ namespace AppNET.App
             {
                 productService.Update(boughtProduct.Id, boughtProduct.CategoryName, name, boughtProduct.Stock + stock, price, boughtProduct.SellPrice);
                 cashService.SaveOutcome(shopPrice, stock, name);
+                logService.SuccessLog($"BİLGİ : {name.ToUpper()} ÜRÜNÜNDEN {stock} ADET SATIN ALINDI");
             }
 
             else

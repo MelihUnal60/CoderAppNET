@@ -24,6 +24,7 @@ namespace AppNET.App
 
         public bool DeleteInvoice(int invoiceId)
         {
+           
           return _repositoryInvoice.Remove(invoiceId);
         }
 
