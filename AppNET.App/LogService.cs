@@ -14,6 +14,7 @@ namespace AppNET.App
 {
     public class LogService : ILogService
     {
+        
         public static List<Log> logList = new List<Log>();
         private readonly IRepository<Log> logRepository;
 
@@ -51,12 +52,13 @@ namespace AppNET.App
             Log log = new Log(logType,logMessage);
             log._logDate= DateTime.Now;
             
+            
             WriteLogToTxt(log,ConsFileRoad.LOG_DOSYA_YOLU);
             
         }
         public void WriteLogToTxt(Log log,string fileRoad)
         {
-            File.WriteAllText(JsonSerializer.Serialize(log), fileRoad);
+            File.WriteAllText(ConsFileRoad.LOG_DOSYA_YOLU, JsonSerializer.Serialize(log));
         }
 
         public void SuccessLog(string message)

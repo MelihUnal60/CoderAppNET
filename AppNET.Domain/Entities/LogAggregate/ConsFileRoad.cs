@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AppNET.Domain.Entities.LogAggregate
 {
-    public class ConsFileRoad
+    public static class ConsFileRoad
     {
         public const string LOG_DOSYA_YOLU = "log.txt";
     }
