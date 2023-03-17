@@ -58,7 +58,7 @@ namespace AppNET.App
         }
         public void WriteLogToTxt(Log log,string fileRoad)
         {
-            File.WriteAllText(ConsFileRoad.LOG_DOSYA_YOLU, JsonSerializer.Serialize(log));
+            File.WriteAllText(ConsFileRoad.LOG_DOSYA_YOLU, JsonSerializer.Serialize(log,new JsonSerializerOptions { IncludeFields = true }));
         }
 
         public void SuccessLog(string message)
