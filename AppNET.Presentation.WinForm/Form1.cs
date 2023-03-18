@@ -2,6 +2,7 @@ using AppNET.App;
 using AppNET.Domain.Entities;
 using AppNET.Infrastructure;
 using AppNET.Infrastructure.Controls;
+using System.Net.Mail;
 
 namespace AppNET.Presentation.WinForm
 {
@@ -203,6 +204,7 @@ namespace AppNET.Presentation.WinForm
                 decimal buyPrice = Convert.ToDecimal(txtShopProductPrice.Text);
                 shoppingService.BuyProduct(name, stock, buyPrice);
                 invoiceService.SaveInvoice(999, "Gider", buyPrice, $"{name} ürününden {stock} adet alýndý.");
+                
 
             }
             else
