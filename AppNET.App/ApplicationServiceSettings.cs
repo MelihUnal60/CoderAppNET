@@ -39,6 +39,7 @@ namespace AppNET.App
             IOCContainer.Register<ProductService>(()=> new ProductService());
             IOCContainer.Register<IRepository<Log>>(()=>new TextFileRepository<Log>());
             IOCContainer.Register<ILogService>(()=>new LogService());
+            IOCContainer.Register<SendInfoMailService>(()=>new SendInfoMailService());
         }
 
         //public static IRepository<Category> Metod()

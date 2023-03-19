@@ -18,6 +18,7 @@ namespace AppNET.Presentation.WinForm
         IInvoiceService invoiceService= IOCContainer.Resolve<IInvoiceService>();
         CashService cashService= IOCContainer.Resolve<CashService>();
         ShoppingService shoppingService= IOCContainer.Resolve<ShoppingService>();
+        SendInfoMailService sendInfoMailService = IOCContainer.Resolve<SendInfoMailService>();
 
 
         private void FillProductGrid()
@@ -204,7 +205,7 @@ namespace AppNET.Presentation.WinForm
                 decimal buyPrice = Convert.ToDecimal(txtShopProductPrice.Text);
                 shoppingService.BuyProduct(name, stock, buyPrice);
                 invoiceService.SaveInvoice(999, "Gider", buyPrice, $"{name} ürününden {stock} adet alýndý.");
-                
+                sendInfoMailService.SendMail("melihunal2560@gmail.com", $"{name} ürününden {stock} adet alýndý.");
 
             }
             else
@@ -212,6 +213,7 @@ namespace AppNET.Presentation.WinForm
                 decimal sellPrice = Convert.ToDecimal(txtShopProductPrice.Text);
                 shoppingService.SellProduct(name, stock, sellPrice);
                 invoiceService.SaveInvoice(333, "Gelir", sellPrice, $"{name} ürününden {stock} adet satýldý.");
+                sendInfoMailService.SendMail("melihunal2560@gmail.com", $"{name} ürününden {stock} adet satýldý.");
             }
 
             FillInvoiceGrid();

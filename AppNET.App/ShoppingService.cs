@@ -16,6 +16,7 @@ namespace AppNET.App
         private readonly ProductService productService;
         private readonly InvoiceService invoiceService;
         private readonly ILogService logService;
+        
 
         public ShoppingService()
         {

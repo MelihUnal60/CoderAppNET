@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Mail;
 
 namespace AppNET.App
 {
@@ -14,12 +15,14 @@ namespace AppNET.App
     {
         
         private readonly IRepository<Invoice> _repositoryInvoice;
-        //private readonly CashService cashService;
+        
+        private readonly SendInfoMailService sendInfoMailService;
 
         public InvoiceService()
         {
             _repositoryInvoice = IOCContainer.Resolve<IRepository<Invoice>>();
             //cashService = IOCContainer.Resolve<CashService>();
+            sendInfoMailService = IOCContainer.Resolve<SendInfoMailService>();
         }
 
         public bool DeleteInvoice(int invoiceId)
@@ -49,12 +52,15 @@ namespace AppNET.App
             invoice.Price = price;
             invoice.Description = description;
             _repositoryInvoice.Add(invoice);
+            sendInfoMailService.SendMail("melihunal2560@gmail.com", $"{invoice.Id} numaralı,{invoice.DocType} işlemi içeren," +
+                $"{invoice.Price} tutarında fatura, {invoice.DocDate} tarihinde oluşturulmuştur.");
             
 
-            //cashService.SaveInvoiceToCash(invoice);
-            //cashService.AddInvoiceToCashList(invoice);
 
-        }
+        //cashService.SaveInvoiceToCash(invoice);
+        //cashService.AddInvoiceToCashList(invoice);
+
+    }
 
         
     }

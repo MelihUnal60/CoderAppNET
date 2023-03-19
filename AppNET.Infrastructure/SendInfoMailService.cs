@@ -7,7 +7,7 @@ using System.Net.Mail;
 
 namespace AppNET.Infrastructure
 {
-    public class SendInfoMail
+    public class SendInfoMailService
     {
         public void SendMail(string mailAddress,string mailMessage)
         {
